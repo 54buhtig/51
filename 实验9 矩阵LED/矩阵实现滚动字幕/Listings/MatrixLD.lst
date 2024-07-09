@@ -1,0 +1,42 @@
+C51 COMPILER V9.54   MATRIXLD                                                              03/20/2023 21:20:32 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MATRIXLD
+OBJECT MODULE PLACED IN .\Objects\MatrixLD.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE MatrixLD.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -MatrixLD.lst) TABS(2) OBJECT(.\Objects\MatrixLD.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          
+   3          sbit RCK = P3^5;
+   4          sbit SCK = P3^6;
+   5          sbit SER = P3^4;
+   6          
+   7          void _74_Byte_transfer(unsigned char Byte)
+   8          {
+   9   1        unsigned char i;
+  10   1        for(i=0;i<8;i++)
+  11   1        {
+  12   2          SER = Byte & (0x80>>i);
+  13   2          SCK = 1;
+  14   2          SCK = 0;
+  15   2        }
+  16   1        RCK = 1;
+  17   1        RCK = 0;
+  18   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     45    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

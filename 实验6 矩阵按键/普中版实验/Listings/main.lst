@@ -1,0 +1,147 @@
+C51 COMPILER V9.54   MAIN                                                                  11/03/2022 19:12:28 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          
+   3          typedef unsigned char u8;
+   4          typedef unsigned int u16;
+   5          #define Nixue P0
+   6          #define MATXUE P1
+   7          
+   8          u16 NixueTable[]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,
+   9                            0x7f,0x6f,0x77,0xff,0x39,0xbf,0x79,0x71,0x00};
+  10          
+  11          
+  12          
+  13          void Delay_1ms(u16 time)
+  14          {
+  15   1        u8 i,j;
+  16   1        while(time--)
+  17   1        {
+  18   2          i=2;
+  19   2          j=239;
+  20   2          do
+  21   2          {
+  22   3            while(--j);
+  23   3          }while(--i);
+  24   2        }
+  25   1      }
+  26          
+  27          
+  28          
+  29          
+  30          
+  31          u8 Scan_MatXue(void)
+  32          {
+  33   1          u8 key_value=0;
+  34   1      
+  35   1          MATXUE=0xf7;           //进行第一行的扫描
+  36   1          if(MATXUE!=0xf7)
+  37   1          {
+  38   2            Delay_1ms(100);
+  39   2            if(MATXUE!=0xf7)
+  40   2            {
+  41   3              switch(MATXUE)
+  42   3              {
+  43   4                case 0x77:key_value=1;break;
+  44   4                case 0xb7:key_value=5;break;
+  45   4                case 0xd7:key_value=9;break;
+  46   4                case 0xe7:key_value=13;break;
+  47   4              }
+  48   3            } 
+  49   2          }
+  50   1          while(MATXUE!=0xf7);
+  51   1          
+  52   1           MATXUE=0xfb;           //进行第二行的扫描
+  53   1          if(MATXUE!=0xfb)
+  54   1          {
+C51 COMPILER V9.54   MAIN                                                                  11/03/2022 19:12:28 PAGE 2   
+
+  55   2            Delay_1ms(100);
+  56   2            if(MATXUE!=0xfb)
+  57   2            {
+  58   3              switch(MATXUE)
+  59   3              {
+  60   4                case 0x7b:key_value=2;break;
+  61   4                case 0xbb:key_value=6;break;
+  62   4                case 0xdb:key_value=10;break;
+  63   4                case 0xeb:key_value=14;break;
+  64   4              }
+  65   3            } 
+  66   2          }
+  67   1          while(MATXUE!=0xfb);   
+  68   1          
+  69   1           MATXUE=0xfd;           //进行第三行的扫描
+  70   1          if(MATXUE!=0xfd)
+  71   1          {
+  72   2            Delay_1ms(100);
+  73   2            if(MATXUE!=0xfd)
+  74   2            {
+  75   3              switch(MATXUE)
+  76   3              {
+  77   4                case 0x7d:key_value=3;break;
+  78   4                case 0xbd:key_value=7;break;
+  79   4                case 0xdd:key_value=11;break;
+  80   4                case 0xed:key_value=15;break;
+  81   4              }
+  82   3            } 
+  83   2          }
+  84   1          while(MATXUE!=0xfd);
+  85   1      
+  86   1           MATXUE=0xfe;           //进行第四行的扫描
+  87   1          if(MATXUE!=0xfe)
+  88   1          {
+  89   2            Delay_1ms(100);
+  90   2            if(MATXUE!=0xfe)
+  91   2            {
+  92   3              switch(MATXUE)
+  93   3              {
+  94   4                case 0x7e:key_value=4;break;
+  95   4                case 0xbe:key_value=8;break;
+  96   4                case 0xde:key_value=12;break;
+  97   4                case 0xee:key_value=16;break;
+  98   4              }
+  99   3            } 
+ 100   2          }
+ 101   1          while(MATXUE!=0xfe);
+ 102   1        return key_value;
+ 103   1      }
+ 104          int main()
+ 105          {
+ 106   1        u8 key=0;
+ 107   1        while(1)
+ 108   1        {
+ 109   2          key=Scan_MATXUE();
+*** WARNING C206 IN LINE 109 OF main.c: 'Scan_MATXUE': missing function-prototype
+ 110   2          if(key)
+ 111   2          Nixue=NixueTable[key-1];
+ 112   2        }
+ 113   1        return 0;
+ 114   1      }
+ 115          
+C51 COMPILER V9.54   MAIN                                                                  11/03/2022 19:12:28 PAGE 3   
+
+ 116          
+ 117          
+*** WARNING C294 IN LINE 113 OF main.c: unreachable code
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    290    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     34       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  2 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,90 @@
+C51 COMPILER V9.54   MAIN                                                                  03/20/2023 21:08:01 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "Delay.h"
+   3          #include "Timer0.h"
+   4          
+   5          sbit SRCLK = P3^6;
+   6          sbit RCK = P3^5;
+   7          sbit SER = P3^4;
+   8          
+   9          #define MatrixLED_port P0
+  10          
+  11          void _74HC595_transform_port(unsigned char Byte)
+  12          {
+  13   1        int i;
+  14   1        for(i=0;i<8;i++)
+  15   1        {
+  16   2          SER = Byte & (0x80>>i);
+  17   2          SRCLK = 1;
+  18   2          SRCLK = 0;
+  19   2        }
+  20   1        RCK = 1;
+  21   1        RCK = 0;
+  22   1      }
+  23          
+  24          void MatrixLED(unsigned char column,unsigned char Data)
+  25          { 
+  26   1        _74HC595_transform_port(Data);
+  27   1        MatrixLED_port = ~(0x80 >> column);
+  28   1        Delay100us();
+  29   1        MatrixLED_port = 0xff;
+  30   1      }
+  31          
+  32          void main ()
+  33          {
+  34   1          SRCLK = 0;
+  35   1          RCK = 0;
+  36   1            while(1)
+  37   1          {  //0x3E,0x49,0xF5,0x85,0x85,0xF5,0x49,0x7E,
+  38   2            //0xFF,0x81,0x81,0x81,0x81,0x81,0x81,0xFF,
+  39   2            MatrixLED(0,0xFF);
+  40   2            MatrixLED(1,0x81);
+  41   2            MatrixLED(2,0x81);
+  42   2            MatrixLED(3,0x81);
+  43   2            MatrixLED(4,0x81);
+  44   2            MatrixLED(5,0x81);
+  45   2            MatrixLED(6,0x81);
+  46   2            MatrixLED(7,0xFF);
+  47   2            /*MatrixLED(2,0x01);
+  48   2            MatrixLED(1,0x02);
+  49   2            MatrixLED(3,0x42);
+  50   2            MatrixLED(4,0x53);
+  51   2            MatrixLED(5,0xfe);
+  52   2            MatrixLED(6,0xa3);
+  53   2            MatrixLED(7,0x64);
+  54   2            MatrixLED(0,0xdb);*/
+C51 COMPILER V9.54   MAIN                                                                  03/20/2023 21:08:01 PAGE 2   
+
+  55   2          }
+  56   1      }
+  57          
+  58          //void Timer0(void) interrupt 1
+  59          //{
+  60          //  TH0= 0xFC;
+  61          //  TL0= 0x66;
+  62          //  MatrixLED_port = 0xff;
+  63          //}
+  64          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    147    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

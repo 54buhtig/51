@@ -1,0 +1,73 @@
+C51 COMPILER V9.54   UART                                                                  03/07/2023 22:02:58 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE UART
+OBJECT MODULE PLACED IN .\Objects\UART.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE UART.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\UART
+                    -.lst) TABS(2) OBJECT(.\Objects\UART.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          /**
+   3             *@brief  串口初始化
+   4             *@param  无
+   5             *@retval 无
+   6            */
+   7          
+   8          void Uart_Init(void)      //9600bps@11.0592MHz
+   9          {
+  10   1        PCON &= 0x7F;   //波特率不倍速
+  11   1        SCON = 0x50;    //8位数据,可变波特率
+  12   1        TMOD &= 0x0F;   //清除定时器1模式位
+  13   1        TMOD |= 0x20;   //设定定时器1为8位自动重装方式
+  14   1        TL1 = 0xFD;   //设定定时初值
+  15   1        TH1 = 0xFD;   //设定定时器重装值
+  16   1        ET1 = 0;    //禁止定时器1中断
+  17   1        TR1 = 1;    //启动定时器1
+  18   1        EA=1;
+  19   1        ES=1;
+  20   1      }
+  21          
+  22          /**
+  23             *@brief    通过串口发送无符号数字
+  24             *@param    无符号数
+  25             *@retval   无
+  26            */
+  27          
+  28          void Uart_SendByte(unsigned char Byte)
+  29          {
+  30   1        SBUF=Byte;
+  31   1        while(TI==0);
+  32   1          TI=0;
+  33   1      }
+  34          
+  35          /*  串口中断模板
+  36          void Uart_Rountine() interrupt 4
+  37          {
+  38            if(RI==1)
+  39            {
+  40              RI=0;
+  41          
+  42            } 
+  43          }
+  44          */
+  45          
+  46          
+  47          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     35    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+C51 COMPILER V9.54   UART                                                                  03/07/2023 22:02:58 PAGE 2   
+
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

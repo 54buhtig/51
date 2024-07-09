@@ -1,0 +1,89 @@
+C51 COMPILER V9.54   MAIN                                                                  09/26/2022 18:01:14 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          
+   3          typedef unsigned char u8;
+   4          typedef unsigned int u16;
+   5          
+   6          void Delay(u16 time)
+   7          {
+   8   1        u8 i,j;
+   9   1        while(time--)
+  10   1        {
+  11   2          i=2;
+  12   2          j=239;
+  13   2          do
+  14   2          {
+  15   3            while(--j);
+  16   3          }while(--i);
+  17   2        }
+  18   1      }
+  19          
+  20          u16 NixueTable[]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f,0x77,0xff,0x39,0xbf,0x79,0x71,0x00};
+  21          
+  22          void Nixue(u16 Location,u16 Number)
+  23          {
+  24   1        switch(Location)
+  25   1        {
+  26   2          case 1:P2_4=0;P2_3=0;P2_2=0;break;
+  27   2          case 2:P2_4=0;P2_3=0;P2_2=1;break;
+  28   2          case 3:P2_4=0;P2_3=1;P2_2=0;break;
+  29   2          case 4:P2_4=0;P2_3=1;P2_2=1;break;
+  30   2          case 5:P2_4=1;P2_3=0;P2_2=0;break;
+  31   2          case 6:P2_4=1;P2_3=0;P2_2=1;break;
+  32   2          case 7:P2_4=1;P2_3=1;P2_2=0;break;
+  33   2          case 8:P2_4=1;P2_3=1;P2_2=1;break;
+  34   2        }
+  35   1        P0=NixueTable[Number];
+  36   1        Delay(1);
+  37   1        P0=0x00;
+  38   1      }
+  39          
+  40          int main()
+  41          {
+  42   1        Nixue(3,12);
+  43   1        while(1)
+  44   1        {
+  45   2          Nixue(1,1);  //1
+  46   2           Delay(2000); 
+  47   2          Nixue(2,2);   //2
+  48   2           Delay(2000); 
+  49   2          Nixue(3,3);   //3
+  50   2          Delay(2000);  
+  51   2          Nixue(4,4);     //4
+  52   2           Delay(2000); 
+  53   2          Nixue(5,5);     //5
+  54   2           Delay(2000); 
+C51 COMPILER V9.54   MAIN                                                                  09/26/2022 18:01:14 PAGE 2   
+
+  55   2          Nixue(6,6);    //6
+  56   2          Delay(2000);  
+  57   2          Nixue(7,7);     //7
+  58   2           Delay(2000); 
+  59   2          Nixue(8,8);    //8
+  60   2          Delay(2000);  
+  61   2        }
+  62   1      }
+  63          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    229    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     34    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

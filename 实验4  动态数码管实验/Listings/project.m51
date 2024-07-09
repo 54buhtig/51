@@ -1,0 +1,153 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        09/26/2022  18:01:14  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\main.obj TO .\Objects\project PRINT (.\Listings\project.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\main.obj (MAIN)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  .\Objects\project (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0022H     UNIT         ?DT?MAIN
+            IDATA   002AH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     07FDH                  *** GAP ***
+            CODE    0800H     008CH     UNIT         ?C_C51STARTUP
+            CODE    088CH     0073H     UNIT         ?PR?_NIXUE?MAIN
+            CODE    08FFH     0052H     UNIT         ?PR?MAIN?MAIN
+            CODE    0951H     0026H     UNIT         ?C_INITSEG
+            CODE    0977H     0020H     UNIT         ?PR?_DELAY?MAIN
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\project (MAIN)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAIN
+  +--> ?PR?_NIXUE?MAIN
+  +--> ?PR?_DELAY?MAIN
+
+?PR?_NIXUE?MAIN
+  +--> ?PR?_DELAY?MAIN
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\project (MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+BL51 BANKED LINKER/LOCATER V6.22                                                      09/26/2022  18:01:14  PAGE 2
+
+
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  C:088CH         PUBLIC        _Nixue
+  B:00A0H.2       PUBLIC        P2_2
+  B:00A0H.3       PUBLIC        P2_3
+  B:00A0H.4       PUBLIC        P2_4
+  C:08FFH         PUBLIC        main
+  C:0982H         PUBLIC        _Delay
+  D:0008H         PUBLIC        NixueTable
+  C:0979H         SYMBOL        L?0030
+  -------         PROC          L?0029
+  -------         ENDPROC       L?0029
+  C:0979H         SYMBOL        L?0030
+  -------         PROC          _DELAY
+  D:0006H         SYMBOL        time
+  -------         DO            
+  D:0005H         SYMBOL        i
+  D:0004H         SYMBOL        j
+  -------         ENDDO         
+  C:0982H         LINE#         6
+  C:0982H         LINE#         7
+  C:0982H         LINE#         9
+  C:098CH         LINE#         10
+  C:098CH         LINE#         11
+  C:098EH         LINE#         12
+  C:0990H         LINE#         14
+  C:0990H         LINE#         15
+  C:0992H         LINE#         16
+  C:0994H         LINE#         17
+  C:0996H         LINE#         18
+  -------         ENDPROC       _DELAY
+  -------         PROC          _NIXUE
+  D:0006H         SYMBOL        Location
+  D:0004H         SYMBOL        Number
+  C:088CH         LINE#         22
+  C:088CH         LINE#         23
+  C:088CH         LINE#         24
+  C:08BCH         LINE#         25
+  C:08BCH         LINE#         26
+  C:08C0H         LINE#         27
+  C:08C4H         LINE#         28
+  C:08C8H         LINE#         29
+  C:08CCH         LINE#         30
+  C:08D4H         LINE#         31
+  C:08DCH         LINE#         32
+  C:08E4H         LINE#         33
+  C:08EAH         LINE#         34
+  C:08EAH         LINE#         35
+  C:08F4H         LINE#         36
+  C:08FBH         LINE#         37
+  C:08FEH         LINE#         38
+  -------         ENDPROC       _NIXUE
+  -------         PROC          MAIN
+  C:08FFH         LINE#         40
+  C:08FFH         LINE#         41
+BL51 BANKED LINKER/LOCATER V6.22                                                      09/26/2022  18:01:14  PAGE 3
+
+
+  C:08FFH         LINE#         42
+  C:090AH         LINE#         43
+  C:090AH         LINE#         44
+  C:090AH         LINE#         45
+  C:090EH         LINE#         46
+  C:0911H         LINE#         47
+  C:0915H         LINE#         48
+  C:0918H         LINE#         49
+  C:091EH         LINE#         50
+  C:0921H         LINE#         51
+  C:0927H         LINE#         52
+  C:092AH         LINE#         53
+  C:0930H         LINE#         54
+  C:0933H         LINE#         55
+  C:0939H         LINE#         56
+  C:093CH         LINE#         57
+  C:0942H         LINE#         58
+  C:0945H         LINE#         59
+  C:094BH         LINE#         60
+  C:094EH         LINE#         61
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAIN
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 010AH BYTE (12%) *
+******************************************************************************
+
+Program Size: data=43.0 xdata=0 code=410
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)
