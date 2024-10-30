@@ -1,0 +1,337 @@
+C51 COMPILER V9.54   MAIN                                                                  09/19/2024 19:07:12 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\ProgramFiles\DevKits\Keil5_MDK\C51\BIN\C51.EXE main.c ROM(SMALL) OPTIMIZE(8,SPEED) BROWSE INCDIR
+                    -(D:\ProgramFiles\DevKits\Keil5_MDK\C51\INC\Atmel) DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst) OBJECT(.\Objects\main.ob
+                    -j)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "Delay.h"
+   3          #include "Timer0.h"
+   4          
+   5          
+   6          //蜂鸣器端口
+   7          sbit Buzzer = P2^5;
+   8          
+   9          #define SPEED  500
+  10          
+  11          
+  12          #define P   0
+  13          #define L1  1
+  14          #define L1_ 2
+  15          #define L2  3
+  16          #define L2_ 4
+  17          #define L3  5
+  18          #define L4  6
+  19          #define L4_ 7
+  20          #define L5  8
+  21          #define L5_ 9
+  22          #define L6  10
+  23          #define L6_ 11
+  24          #define L7  12
+  25          
+  26          
+  27          #define M1  13
+  28          #define M1_ 14
+  29          #define M2  15
+  30          #define M2_ 16
+  31          #define M3  17
+  32          #define M4  18
+  33          #define M4_ 19
+  34          #define M5  20
+  35          #define M5_ 21
+  36          #define M6  22
+  37          #define M6_ 23
+  38          #define M7  24
+  39          
+  40          #define H1  25
+  41          #define H1_ 26
+  42          #define H2  27
+  43          #define H2_ 28
+  44          #define H3  29
+  45          #define H4  30
+  46          #define H4_ 31
+  47          #define H5  32
+  48          #define H5_ 33
+  49          #define H6  34
+  50          #define H6_ 35
+  51          #define H7  36
+  52          
+  53          
+C51 COMPILER V9.54   MAIN                                                                  09/19/2024 19:07:12 PAGE 2   
+
+  54          
+  55          
+  56          
+  57          
+  58          unsigned int FrqTable[]={
+  59                                  0,
+  60                                  63628,63731,63835,63928,64021,64103,64185,64260,64331,64400,64463,64524,
+  61                                  64580,64633,64684,64732,64777,64820,64860,64898,64934,64968,65000,65030,
+  62                                  65058,65085,65110,65134,65157,65178,65198,65217,65235,65252,65268,65283};
+  63                                                          //音调
+  64                                                           
+  65                                                           
+  66                                                           
+  67          //unsigned char Music1[]={ 
+  68          //      13,4,
+  69          //      13,4,
+  70          //      20,4,
+  71          //      20,4,
+  72          //      22,4,
+  73          //      22,4,
+  74          //      20,4+4,
+  75          //      18,4,
+  76          //      18,4,
+  77          //      17,4,
+  78          //      17,4,
+  79          //      15,4,
+  80          //      15,4,
+  81          //      13,4+4
+  82          //      
+  83          //      0xff
+  84          //};     //乐谱
+  85          
+  86          
+  87          //code属性的数组会存进flash(ROM)里面,属性为只读,适合一些值比较大,非常占用RAM空间,而且定义好不需要再修改
+  88          //例如数码管的断码表,大的表格
+  89          unsigned char code Music2[]=
+  90          {
+  91                  //1
+  92                  P,4,
+  93                  P,4,
+  94                  P,4,
+  95                  M6,2,
+  96                  M7,2,
+  97                  
+  98                  H1,4+2,
+  99                  M7,2,
+ 100                  H1,4,
+ 101                  H3,4,
+ 102                  
+ 103                  M7,4+4+4,
+ 104                  M3,2,
+ 105                  M3,2,
+ 106                  
+ 107                  //2
+ 108                  M6,4+2,
+ 109                  M5,2,
+ 110                  M6,4,
+ 111                  H1,4,
+ 112                  
+ 113                  M5,4+4+4,
+ 114                  M3,4,
+ 115                  
+C51 COMPILER V9.54   MAIN                                                                  09/19/2024 19:07:12 PAGE 3   
+
+ 116                  M4,4+2,
+ 117                  M3,2,
+ 118                  M4,4,
+ 119                  H1,4,
+ 120                  
+ 121                  //3
+ 122                  M3,4+4,
+ 123                  P,2,
+ 124                  H1,2,
+ 125                  H1,2,
+ 126                  H1,2,
+ 127                  
+ 128                  M7,4+2,
+ 129                  M4_,2,
+ 130                  M4,4,
+ 131                  M7,4,
+ 132                  
+ 133                  M7,4+4,
+ 134                  P,4,
+ 135                  M6,2,
+ 136                  M7,2,
+ 137                  
+ 138                  //4
+ 139                  H1,4+2,
+ 140                  M7,2,
+ 141                  H1,4,
+ 142                  H3,4,
+ 143                  
+ 144                  M7,4+4+4,
+ 145                  M3,2,
+ 146                  M3,2,
+ 147                  
+ 148                  M6,4+2,
+ 149                  M5,2,
+ 150                  M6,4,
+ 151                  H1,4,
+ 152                  
+ 153                  //5
+ 154                  M5,4+4+4,
+ 155                  M2,2,
+ 156                  M3,2,
+ 157                  
+ 158                  M4,4,
+ 159                  H1,2,
+ 160                  M7,2+2,
+ 161                  H1,2+4,
+ 162                  
+ 163                  H2,2,
+ 164                  H2,2,
+ 165                  H3,2,
+ 166                  H1,2+4+4,
+ 167                  
+ 168                  //6
+ 169                  H1,2,
+ 170                  M7,2,
+ 171                  M6,2,
+ 172                  M6,2,
+ 173                  M7,4,
+ 174                  M5_,4,
+ 175                  
+ 176                  M6,4+4+4,
+ 177                  H1,2,
+C51 COMPILER V9.54   MAIN                                                                  09/19/2024 19:07:12 PAGE 4   
+
+ 178                  H2,2,
+ 179                  
+ 180                  H3,4+2,
+ 181                  H2,2,
+ 182                  H3,4,
+ 183                  H5,4,
+ 184                  
+ 185                  //7
+ 186                  H2,4+4+4,
+ 187                  M5,2,
+ 188                  M5,2,
+ 189                  
+ 190                  H1,4+2,
+ 191                  M7,2,
+ 192                  H1,4,
+ 193                  H3,4,
+ 194                  
+ 195                  H3,4+4+4+4,
+ 196                  
+ 197                  //8
+ 198                  M6,2,
+ 199                  M7,2,
+ 200                  H1,4,
+ 201                  M7,4,
+ 202                  H2,2,
+ 203                  H2,2,
+ 204                  
+ 205                  H1,4+2,
+ 206                  M5,2+4+4,
+ 207                  
+ 208                  H4,4,
+ 209                  H3,4,
+ 210                  H2,4,
+ 211                  H1,4,
+ 212                  
+ 213                  //9
+ 214                  H3,4+4+4,
+ 215                  H3,4,
+ 216                  
+ 217                  H6,4+4,
+ 218                  H5,4,
+ 219                  H5,4,
+ 220                  
+ 221                  H3,2,
+ 222                  H2,2,
+ 223                  H1,4+4,
+ 224                  P,2,
+ 225                  H1,2,
+ 226                  
+ 227                  //10
+ 228                  H2,4,
+ 229                  H1,2,
+ 230                  H2,2,
+ 231                  H2,4,
+ 232                  H5,4,
+ 233                  
+ 234                  H3,4+4+4,
+ 235                  H3,4,
+ 236                  
+ 237                  H6,4+4,
+ 238                  H5,4+4,
+ 239                  
+C51 COMPILER V9.54   MAIN                                                                  09/19/2024 19:07:12 PAGE 5   
+
+ 240                  //11
+ 241                  H3,2,
+ 242                  H2,2,
+ 243                  H1,4+4,
+ 244                  P,2,
+ 245                  H1,2,
+ 246                  
+ 247                  H2,4,
+ 248                  H1,2,
+ 249                  H2,2+4,
+ 250                  M7,4,
+ 251                  
+ 252                  M6,4+4+4,
+ 253                  M6,2,
+ 254                  M7,2,
+ 255                  
+ 256                  
+ 257                  
+ 258                  0xff   //乐谱结束标志
+ 259          };
+ 260          
+ 261          
+ 262                                                           
+ 263          unsigned char FreqSelect,MusicSelect;   //音乐频率选择和乐谱索引选择
+ 264          
+ 265          void main()
+ 266          {
+ 267   1                      Timer0Init();
+ 268   1                      while(1)
+ 269   1                      {
+ 270   2                              if(Music2[MusicSelect]!=0xff)
+ 271   2                              {
+ 272   3                                      FreqSelect = Music2[MusicSelect];
+ 273   3                                      MusicSelect++;   //后续显示时长
+ 274   3                                      Delay1ms(SPEED/4*Music2[MusicSelect]);
+ 275   3                                      MusicSelect++;  //后续显示频率
+ 276   3                                      TR0= 0;   //关闭计数器
+ 277   3                                      Delay1ms(5);  //模拟抬手动作
+ 278   3                                      TR0= 1;  //打开计数器
+ 279   3                              }
+ 280   2                              else
+ 281   2                              {
+ 282   3                                      TR0 = 0;  //关闭计数器
+ 283   3                                      while(1);
+ 284   3                              }
+ 285   2                      }
+ 286   1      }
+ 287          
+ 288          
+ 289          void Timer0(void) interrupt 1
+ 290          {
+ 291   1              if(FrqTable[FreqSelect])
+ 292   1              {
+ 293   2                      TL0= FrqTable[FreqSelect]%256;  //设置重装载值
+ 294   2                      TH0= FrqTable[FreqSelect]/256;  //设置重装载值
+ 295   2                      Buzzer=!Buzzer;
+ 296   2              }
+ 297   1              
+ 298   1      //      TL0= 0x18;  //设置重装载值
+ 299   1      //      TH0= 0xFC;  //设置重装载值
+ 300   1      //      Buzzer=!Buzzer;
+ 301   1      }
+C51 COMPILER V9.54   MAIN                                                                  09/19/2024 19:07:12 PAGE 6   
+
+ 302          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     98    ----
+   CONSTANT SIZE    =    243    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     76    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

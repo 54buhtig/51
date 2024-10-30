@@ -1,0 +1,1 @@
+"main.c" ROM(SMALL) OPTIMIZE (8,SPEED) BROWSE INCDIR(D:\ProgramFiles\DevKits\Keil5_MDK\C51\INC\Atmel) DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst) OBJECT(.\Objects\main.obj)

@@ -1,0 +1,150 @@
+C51 COMPILER V9.54   IR                                                                    10/23/2024 16:57:07 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE IR
+OBJECT MODULE PLACED IN .\Objects\IR.obj
+COMPILER INVOKED BY: D:\ProgramFiles\DevKits\Keil5_MDK\C51\BIN\C51.EXE IR.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND 
+                    -PRINT(.\Listings\IR.lst) OBJECT(.\Objects\IR.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "Timer0.h"
+   3          #include "Int0.h"
+   4          
+   5          unsigned  int IR_Time;   //进行计时
+   6          unsigned  char IR_State;  //红外线方波状态,默认为空闲状态
+   7          
+   8          unsigned char IR_Data[4];   //数据缓存
+   9          unsigned char IR_pData;  //表示当前存储的位数
+  10          
+  11          
+  12          unsigned char IR_DataFlag;   //标志位判断是否得到数据
+  13          unsigned char IR_RepeatFlag; //NEC标准的重发标志 
+  14          unsigned char IR_Address;    //存放我们接收的最终地址
+  15          unsigned char IR_Command;    //存放我们接收的最终命令码
+  16          
+  17          unsigned char TestNum;
+  18          
+  19          void IR_Init(void)
+  20          {
+  21   1              Timer0_Init();  //初始化计时器
+  22   1              Int0_Init();    //初始化外部中断1
+  23   1      }
+  24          
+  25          
+  26          unsigned char IR_GetDataFlag(void)
+  27          {
+  28   1              if(IR_DataFlag)
+  29   1              {
+  30   2                      IR_DataFlag=0;
+  31   2                      return 1;
+  32   2              }
+  33   1              return 0;
+  34   1      }
+  35          
+  36          
+  37          unsigned char IR_GetRepeat(void)
+  38          {
+  39   1              if(IR_RepeatFlag==1)
+  40   1              {
+  41   2                      IR_RepeatFlag=0;
+  42   2                      return 1;
+  43   2              }
+  44   1              return 0;
+  45   1      }
+  46                  
+  47          unsigned char IR_GetAddress(void)
+  48          {
+  49   1              return IR_Address;
+  50   1      }
+  51          
+  52          unsigned char IR_GetCommand(void)
+  53          {
+  54   1              return IR_Command;
+C51 COMPILER V9.54   IR                                                                    10/23/2024 16:57:07 PAGE 2   
+
+  55   1      }
+  56          
+  57          void Int0_Routine(void) interrupt 0
+  58          {
+  59   1              if(IR_State==0)
+  60   1              {               
+  61   2                      Timer0_SetCounter(0);   //将计时器清零
+  62   2                      Timer0_Run(1);         //计时器启动
+  63   2                      IR_State = 1;         //红外接收状态置为1
+  64   2              }
+  65   1              else if(IR_State==1)    //搜寻起始信号
+  66   1              {
+  67   2                      IR_Time = Timer0_GetCounter();//获得计时器当前的时间
+  68   2                      Timer0_SetCounter(0);   //将计时器清零,方便下次使用
+  69   2                      if(IR_Time>13500-3300  && IR_Time<13500+3300 )   //起始信号判定
+  70   2                      {
+  71   3      //                      P2=0;
+  72   3                              IR_State = 2;         //红外线状态置为2
+  73   3                      }
+  74   2                      else if(IR_Time>10368-500  && IR_Time<10368+500 )
+  75   2                      {
+  76   3      //                      P2=0;
+  77   3      //                      LCD_ShowNum(1,8,IR_Time,6);
+  78   3      
+  79   3                              IR_RepeatFlag=1;    //重发标志位置1
+  80   3                              IR_State = 0;      //红外接收信号置1
+  81   3                              Timer0_Run(0);         //计时器停止
+  82   3                      }       
+  83   2                      else  //处理信号接收错误的情况
+  84   2                      {
+  85   3                              IR_State = 1;      //红外接收信号置1,继续搜寻起始信号
+  86   3                      }
+  87   2              }       
+  88   1              else if(IR_State==2)   //解码
+  89   1              {
+  90   2                      IR_Time = Timer0_GetCounter();//获得计时器当前的时间
+  91   2                      Timer0_SetCounter(0);   //将计时器清零,方便下次使用
+  92   2                      if(IR_Time>1120-500 &&IR_Time<1120+500 )   //存储0
+  93   2                      {
+  94   3                              IR_Data[IR_pData/8]&=~(0x01<<(IR_pData%8));  
+  95   3                              IR_pData++;
+  96   3                      }
+  97   2                      else if(IR_Time>2250-500 &&IR_Time<2250+500 )   //存储1
+  98   2                      {
+  99   3                              IR_Data[IR_pData/8]|=(0x01<<(IR_pData%8));  
+ 100   3                              IR_pData++;
+ 101   3                      }
+ 102   2                      else   //收到错误信息
+ 103   2                      {
+ 104   3                              IR_pData=0;   //将数据放弃
+ 105   3                              IR_State=1;   //开始搜寻起始信号
+ 106   3                      }
+ 107   2                      if(IR_pData>=32)  //数据缓存区存满
+ 108   2                      {
+ 109   3                              P2=0;
+ 110   3                              IR_pData=0;     //将位指针归位
+ 111   3                              if((IR_Data[0]==~IR_Data[1]) && (IR_Data[2]==~IR_Data[3]))  //校验数据是否正确
+ 112   3                              {
+ 113   4                                      IR_Address=IR_Data[0];  //将位置存进位置变量里面
+ 114   4                                      IR_Command=IR_Data[2];  //将命令存进命令变量里面
+ 115   4                                      IR_DataFlag=1;          //数据标志位置1
+ 116   4                              }
+C51 COMPILER V9.54   IR                                                                    10/23/2024 16:57:07 PAGE 3   
+
+ 117   3                              Timer0_Run(0);  //定时器停止
+ 118   3                              IR_State=0;    //红外接收处于空闲状态
+ 119   3                      }
+ 120   2              }
+ 121   1      }       
+ 122          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    382    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     13    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

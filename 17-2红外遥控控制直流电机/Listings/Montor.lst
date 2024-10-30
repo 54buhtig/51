@@ -1,0 +1,64 @@
+C51 COMPILER V9.54   MONTOR                                                                10/23/2024 16:53:49 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MONTOR
+OBJECT MODULE PLACED IN .\Objects\Montor.obj
+COMPILER INVOKED BY: D:\ProgramFiles\DevKits\Keil5_MDK\C51\BIN\C51.EXE Montor.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXT
+                    -END PRINT(.\Listings\Montor.lst) OBJECT(.\Objects\Montor.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "Timer1.h"
+   3          
+   4          
+   5          sbit Motor = P1^0;   //电机引脚定义
+   6          unsigned char Counter,Compare;
+   7          
+   8          
+   9          void Montor_Init(void)
+  10          {
+  11   1                      Timer1_Init();   //初始化定时器1
+  12   1      }
+  13          
+  14          
+  15          void Montor_SetSpeed(unsigned char Speed)
+  16          {
+  17   1              Compare=Speed;
+  18   1              
+  19   1      }
+  20          
+  21          
+  22          void Timer1_Routine(void) interrupt 3
+  23          {
+  24   1      //      static unsigned char TCount0;
+  25   1              TL1 = 0x9C;
+  26   1              TH1 = 0xFF;
+  27   1              Counter++;
+  28   1              Counter%=100;   //将counter重置
+  29   1              if(Counter<Compare)
+  30   1              {
+  31   2      //              LED=0;
+  32   2                      Motor=1;  //电机的极性与LED相反
+  33   2              }
+  34   1              else
+  35   1              {
+  36   2      //              LED=1;
+  37   2                      Motor=0;  //电机的极性与LED相反
+  38   2              }
+  39   1      
+  40   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     49    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
